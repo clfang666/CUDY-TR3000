@@ -15,6 +15,12 @@ name: OpenWrt Builder
 on:
   repository_dispatch:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.config'
+      - 'diy-part*.sh'
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
