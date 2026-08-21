@@ -22,7 +22,7 @@ permissions:
 
 concurrency:
   group: openwrt-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
@@ -101,7 +101,7 @@ jobs:
           cd openwrt
           "$GITHUB_WORKSPACE/$DIY_P2_SH"
           if [ "${{ matrix.variant }}" = "openclash" ]; then
-            ./scripts/config --file .config --keep-case --enable PACKAGE_luci-app-openclash
+            sed -i 's/^# CONFIG_PACKAGE_luci-app-openclash is not set$/CONFIG_PACKAGE_luci-app-openclash=y/' .config
           fi
 
       - name: Download packages
