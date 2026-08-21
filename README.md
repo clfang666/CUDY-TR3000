@@ -1,39 +1,56 @@
-**English** | [中文](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
+# CUDY TR3000 固件自动构建
 
-# Actions-OpenWrt
+[![OpenWrt Builder](https://github.com/clfang666/CUDY-TR3000/actions/workflows/openwrt-builder.yml/badge.svg)](https://github.com/clfang666/CUDY-TR3000/actions/workflows/openwrt-builder.yml)
+[![Downloads](https://img.shields.io/github/downloads/clfang666/CUDY-TR3000/total)](https://github.com/clfang666/CUDY-TR3000/releases)
 
-[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/P3TERX/Actions-OpenWrt/blob/master/LICENSE)
-![GitHub Stars](https://img.shields.io/github/stars/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Stars&logo=github)
-![GitHub Forks](https://img.shields.io/github/forks/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Forks&logo=github)
+本仓库将原来的 [`tr3000`](https://github.com/clfang666/tr3000) 和 [`tr3000-open`](https://github.com/clfang666/tr3000-open) 合并为一套统一构建流程。每次构建同时生成基础版和 OpenClash 版固件，不再需要维护两套重复配置。
 
-A template for building OpenWrt with GitHub Actions
+固件基于 [`padavanonly/immortalwrt-mt798x-6.6`](https://github.com/padavanonly/immortalwrt-mt798x-6.6) 的 `openwrt-24.10-6.6` 分支，通过 GitHub Actions 自动编译。
 
-## Usage
+## 固件版本
 
-- Click the [Use this template](https://github.com/P3TERX/Actions-OpenWrt/generate) button to create a new repository.
-- Generate `.config` files using [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) source code. ( You can change it through environment variables in the workflow file. )
-- Push `.config` file to the GitHub repository.
-- Select `Build OpenWrt` on the Actions page.
-- Click the `Run workflow` button.
-- When the build is complete, click the `Artifacts` button in the upper right corner of the Actions page to download the binaries.
+| 版本 | 文件名后缀 | 说明 |
+| --- | --- | --- |
+| 基础版 | `-standard` | 不内置 OpenClash，依赖更少，适合不需要 OpenClash 的用户 |
+| OpenClash 版 | `-openclash` | 内置 `luci-app-openclash` 及构建时自动解析的相关依赖 |
 
-## Tips
+## 设备目标
 
-- It may take a long time to create a `.config` file and build the OpenWrt firmware. Thus, before create repository to build your own firmware, you may check out if others have already built it which meet your needs by simply [search `Actions-Openwrt` in GitHub](https://github.com/search?q=Actions-openwrt).
-- Add some meta info of your built firmware (such as firmware architecture and installed packages) to your repository introduction, this will save others' time.
+| 配置文件 | 构建目标 |
+| --- | --- |
+| `TR3000V1_256M.config` | `cudy_tr3000-v1-256mb` |
+| `TR3000V1_MOD.config` | `cudy_tr3000-v1-ubootmod` |
 
-## Credits
+每次完整运行会生成四组固件：两个设备目标分别对应 `standard` 和 `openclash` 两种版本。
 
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [OpenWrt](https://github.com/openwrt/openwrt)
-- [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
-- [Mikubill/transfer](https://github.com/Mikubill/transfer)
-- [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
-- [Mattraks/delete-workflow-runs](https://github.com/Mattraks/delete-workflow-runs)
-- [dev-drprasad/delete-older-releases](https://github.com/dev-drprasad/delete-older-releases)
-- [peter-evans/repository-dispatch](https://github.com/peter-evans/repository-dispatch)
+## 下载与识别
+
+编译完成的固件会发布到 [Releases](https://github.com/clfang666/CUDY-TR3000/releases)。选择文件时同时核对：
+
+1. 设备目标是 `256mb` 还是 `ubootmod`。
+2. 需要基础版 `standard` 还是 OpenClash 版 `openclash`。
+3. 文件名包含 `sysupgrade`，且与当前设备分区布局匹配。
+
+> [!WARNING]
+> 第三方固件存在变砖风险。刷写前请确认设备硬件版本、闪存/分区布局和当前 U-Boot 类型，并备份原厂固件及配置。不要在 `256mb` 与 `ubootmod` 目标之间盲目混刷。
+
+## 自动构建
+
+以下情况会触发构建：
+
+- 在 Actions 页面手动运行 `OpenWrt Builder`。
+- 上游源码更新检查发现新提交。
+- `main` 分支中的设备配置、DIY 脚本或构建工作流发生变化。
+
+构建流程使用一个四项矩阵并行生成固件，随后由单独的发布任务统一创建 Release，从而避免两个版本的同名文件互相覆盖。仓库默认保留最近三个 Release。
+
+## 项目来源
+
+- 构建模板：[P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
+- 固件源码：[padavanonly/immortalwrt-mt798x-6.6](https://github.com/padavanonly/immortalwrt-mt798x-6.6)
+- 基础版历史：[clfang666/tr3000](https://github.com/clfang666/tr3000)
+- OpenClash 版历史：[clfang666/tr3000-open](https://github.com/clfang666/tr3000-open)
 
 ## License
 
-[MIT](https://github.com/P3TERX/Actions-OpenWrt/blob/main/LICENSE) © [**P3TERX**](https://p3terx.com)
+[MIT](LICENSE)

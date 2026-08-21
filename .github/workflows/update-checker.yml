@@ -21,6 +21,10 @@ on:
   schedule:
     - cron: '17 0,18 * * *'
 
+permissions:
+  actions: write
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -30,8 +34,8 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
-        echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        git clone --depth 1 "$REPO_URL" -b "$REPO_BRANCH" .
+        echo "commitHash=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
     - name: Compare Commit Hash
       id: cacheHash
@@ -43,7 +47,7 @@ jobs:
     - name: Save New Commit Hash
       if: steps.cacheHash.outputs.cache-hit != 'true'
       run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+        echo "${{ steps.getHash.outputs.commitHash }}" | tee .commitHash
 
     - name: Trigger build
       if: steps.cacheHash.outputs.cache-hit != 'true'
