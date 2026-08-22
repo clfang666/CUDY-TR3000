@@ -181,10 +181,21 @@ jobs:
       - name: Generate release information
         id: release_info
         run: |
-          echo "release_tag=$(date +'%Y.%m.%d')-run${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          release_tag="$(date +'%Y.%m.%d')-run${{ github.run_number }}"
+          release_base="https://github.com/$GITHUB_REPOSITORY/releases/download/$release_tag"
+          echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
           printf '%s\n' \
-            '本次发布同时包含 standard（基础版）和 openclash（内置 OpenClash）固件。' \
-            '请根据设备目标选择 256mb 或 ubootmod，并在刷写前核对文件名。' \
+            '## 四个固件快捷下载' \
+            '' \
+            '| 设备目标 | 版本 | 说明 | 下载 |' \
+            '| --- | --- | --- | --- |' \
+            "| 256MB | Standard | 不内置 OpenClash | [下载]($release_base/immortalwrt-mediatek-filogic-cudy_tr3000-v1-256mb-squashfs-sysupgrade-standard.bin) |" \
+            "| 256MB | OpenClash | 内置 OpenClash | [下载]($release_base/immortalwrt-mediatek-filogic-cudy_tr3000-v1-256mb-squashfs-sysupgrade-openclash.bin) |" \
+            "| U-Boot Mod | Standard | 不内置 OpenClash | [下载]($release_base/immortalwrt-mediatek-filogic-cudy_tr3000-v1-ubootmod-squashfs-sysupgrade-standard.bin) |" \
+            "| U-Boot Mod | OpenClash | 内置 OpenClash | [下载]($release_base/immortalwrt-mediatek-filogic-cudy_tr3000-v1-ubootmod-squashfs-sysupgrade-openclash.bin) |" \
+            '' \
+            '> [!WARNING]' \
+            '> 256MB 与 U-Boot Mod 是不同设备目标。刷写前必须确认设备硬件和分区布局；不要在两个目标之间盲目混刷。' \
             > release.txt
 
       - name: Upload firmware to release
