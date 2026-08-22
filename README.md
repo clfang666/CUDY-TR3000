@@ -25,7 +25,16 @@
 
 ## 下载与识别
 
-编译完成的固件会发布到 [Releases](https://github.com/clfang666/CUDY-TR3000/releases)。选择文件时同时核对：
+以下链接始终指向 [Latest Release](https://github.com/clfang666/CUDY-TR3000/releases/latest) 中对应的最新固件：
+
+| 设备目标 | 版本 | 说明 | 快捷下载 |
+| --- | --- | --- | --- |
+| 256MB | Standard | 适用于 `cudy_tr3000-v1-256mb`，不内置 OpenClash | [下载最新固件](https://github.com/clfang666/CUDY-TR3000/releases/latest/download/immortalwrt-mediatek-filogic-cudy_tr3000-v1-256mb-squashfs-sysupgrade-standard.bin) |
+| 256MB | OpenClash | 适用于 `cudy_tr3000-v1-256mb`，内置 OpenClash | [下载最新固件](https://github.com/clfang666/CUDY-TR3000/releases/latest/download/immortalwrt-mediatek-filogic-cudy_tr3000-v1-256mb-squashfs-sysupgrade-openclash.bin) |
+| U-Boot Mod | Standard | 仅适用于 U-Boot Mod 分区布局，不内置 OpenClash | [下载最新固件](https://github.com/clfang666/CUDY-TR3000/releases/latest/download/immortalwrt-mediatek-filogic-cudy_tr3000-v1-ubootmod-squashfs-sysupgrade-standard.bin) |
+| U-Boot Mod | OpenClash | 仅适用于 U-Boot Mod 分区布局，内置 OpenClash | [下载最新固件](https://github.com/clfang666/CUDY-TR3000/releases/latest/download/immortalwrt-mediatek-filogic-cudy_tr3000-v1-ubootmod-squashfs-sysupgrade-openclash.bin) |
+
+也可以进入 [全部 Releases](https://github.com/clfang666/CUDY-TR3000/releases) 下载历史版本。选择文件时同时核对：
 
 1. 设备目标是 `256mb` 还是 `ubootmod`。
 2. 需要基础版 `standard` 还是 OpenClash 版 `openclash`。
